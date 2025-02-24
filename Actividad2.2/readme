@@ -1,1 +1,34 @@
+import pandas as pd 
 
+df=pd.read_csv("amsterdam1.csv")
+
+# Convertir "host_response_rate" a número
+df["host_response_rate"] = df["host_response_rate"].str.rstrip("%").astype(float)
+
+#Convertir "price" a número
+df["price"] = df["price"].str.replace("$", "").str.replace(",", "").astype(float)
+df["price_mxn"] = df["price"] * 18 #Conversión a pesos
+
+# Filtro host con respuesta mayor a 95% y que no sean superhost
+filtro_a = df[(df["host_response_rate"] > 95) & (df["host_is_superhost"] == "f")]
+filtro_a.to_csv("filtro_a.csv")
+
+# Filtro propiedades que no tengan 1 baño
+filtro_b = df[df["bathrooms"] != "1 bath"]
+filtro_b.to_csv("filtro_b.csv")
+
+# Filtro precio entre 100 y 200 USD convertido a pesos
+filtro_c = df[(df['price_mxn'] >= 1800) & (df['price_mxn'] <= 3600)]
+filtro_c.to_csv("filtro_c.csv")
+
+# Filtro instant bookable y host verificado
+filtro_d = df[(df["instant_bookable"] == "t") & (df["host_identity_verified"] == "t")]
+filtro_d.to_csv("filtro_d.csv")
+
+# Filtro tipos de cuarto hotel room o Private room
+filtro_e = df[df["room_type"].isin(["Hotel room", "Private room"])]
+filtro_e.to_csv("filtro_e.csv")
+
+# Filtro más de 4 accommodates
+filtro_f = df[df["accommodates"] > 4]
+filtro_f.to_csv("filtro_f.csv")
