@@ -1,1 +1,36 @@
+import pandas as pd 
 
+df=pd.read_csv("amsterdam1.csv")
+
+# filtro los registros de 5 “host name” diferentes
+nombres_elegidos = ["Rob & Fang", "Olly & Josh", "Erik And Mary Jo", "Richard En Birgit", "Gisèle And Simon"]
+filtro_g = df.loc[df['host_name'].isin(nombres_elegidos)]
+filtro_g.to_csv("filtro_Hosts.csv")
+
+# filtro de los host con primera review “despues del año 2020”
+filtro_i = df.loc[df['first_review'] > '2020-12-31']
+filtro_i.to_csv("filtro_FirstR.csv")
+
+# filtro de los host que responden “a más tardar en 1 día”
+df = df[df['host_response_time'].isin(["within a day", "within a few hours", "within an hour"])]
+df.to_csv("filtro_ResponseT.csv")
+
+# filtro de las filas “Múltiplos de 200… (400, 600, 800, etc.)”
+df = df.iloc[::200, :]
+df.to_csv("filtro_m200.csv")
+
+# filtro de los tipos de cuarto: “Entire home” y “Private room”
+df = df[df['room_type'].isin(["Entire home", "Private room"])]
+df.to_csv("filtro_room_t.csv")
+
+# filtro de los registros que “a lo mucho cuenten con 4 camas”
+df = df[df['beds'] <= 4]
+df.to_csv("filtro_camas.csv")
+
+# filtro de los registros que “sean superhost”
+df = df[df['host_is_superhost'] == "t"]
+df.to_csv("filtro_superanfitrion.csv")
+
+#filtro de los registros de las columnas “impares”
+df = df[df.columns[1::2]]
+df.to_csv("filtro_impares.csv")
